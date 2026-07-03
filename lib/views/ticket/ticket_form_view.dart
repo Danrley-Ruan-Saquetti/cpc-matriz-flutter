@@ -47,6 +47,8 @@ class _TicketFormBodyState extends State<_TicketFormBody> {
       return;
     }
 
+    final navigator = Navigator.of(context);
+    final comprovanteService = context.read<ComprovanteService>();
     final vm = context.read<TicketFormViewModel>();
 
     final ok = await vm.gerar(
@@ -59,27 +61,15 @@ class _TicketFormBodyState extends State<_TicketFormBody> {
       return;
     }
 
-    if (ok) {
-      AppFeedback.sucesso(context, 'Ticket ${vm.ultimoGerado!.codigo} gerado!');
-
-      await _oferecerComprovante(vm);
-
-      if (mounted) {
-        Navigator.pop(context, true);
-      }
-    } else {
+    if (!ok) {
       AppFeedback.erro(context, vm.errorMessage ?? 'Erro ao gerar ticket.');
-    }
-  }
-
-  Future<void> _oferecerComprovante(TicketFormViewModel vm) async {
-    final ticket = vm.ultimoGerado;
-
-    if (ticket == null) {
       return;
     }
 
-    final ver = await AppFeedback.confirmar(
+    final ticket = vm.ultimoGerado!;
+    AppFeedback.sucesso(context, 'Ticket ${ticket.codigo} gerado!');
+
+    final verComprovante = await AppFeedback.confirmar(
       context,
       title: 'Comprovante',
       message: 'Ticket gerado! Deseja visualizar o comprovante?',
@@ -87,20 +77,17 @@ class _TicketFormBodyState extends State<_TicketFormBody> {
       cancelar: 'Agora nao',
     );
 
-    if (!ver || !mounted) {
-      return;
+    if (verComprovante) {
+      await navigator.pushNamed(
+        AppRoutes.comprovante,
+        arguments: ComprovanteArgs(
+          titulo: 'Comprovante do ticket',
+          conteudo: comprovanteService.fromTicket(ticket),
+        ),
+      );
     }
 
-    final texto = context.read<ComprovanteService>().fromTicket(ticket);
-
-    await Navigator.pushNamed(
-      context,
-      AppRoutes.comprovante,
-      arguments: ComprovanteArgs(
-        titulo: 'Comprovante do ticket',
-        conteudo: texto,
-      ),
-    );
+    navigator.pop(true);
   }
 
   @override

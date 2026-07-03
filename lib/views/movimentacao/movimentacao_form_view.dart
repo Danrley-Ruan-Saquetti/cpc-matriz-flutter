@@ -77,6 +77,8 @@ class _MovimentacaoFormBodyState extends State<_MovimentacaoFormBody> {
       return;
     }
 
+    final navigator = Navigator.of(context);
+    final comprovanteService = context.read<ComprovanteService>();
     final vm = context.read<MovimentacaoFormViewModel>();
 
     final ok = await vm.registrar(
@@ -91,30 +93,18 @@ class _MovimentacaoFormBodyState extends State<_MovimentacaoFormBody> {
       return;
     }
 
-    if (ok) {
-      AppFeedback.sucesso(context, 'Movimentacao registrada!');
-
-      await _oferecerComprovante(vm);
-
-      if (mounted) {
-        Navigator.pop(context, true);
-      }
-    } else {
+    if (!ok) {
       AppFeedback.erro(
         context,
         vm.errorMessage ?? 'Erro ao registrar movimentacao.',
       );
-    }
-  }
-
-  Future<void> _oferecerComprovante(MovimentacaoFormViewModel vm) async {
-    final mov = vm.ultimaRegistrada;
-
-    if (mov == null) {
       return;
     }
 
-    final ver = await AppFeedback.confirmar(
+    final mov = vm.ultimaRegistrada!;
+    AppFeedback.sucesso(context, 'Movimentacao registrada!');
+
+    final verComprovante = await AppFeedback.confirmar(
       context,
       title: 'Comprovante',
       message: 'Deseja visualizar o comprovante desta movimentacao?',
@@ -122,17 +112,17 @@ class _MovimentacaoFormBodyState extends State<_MovimentacaoFormBody> {
       cancelar: 'Agora nao',
     );
 
-    if (!ver || !mounted) {
-      return;
+    if (verComprovante) {
+      await navigator.pushNamed(
+        AppRoutes.comprovante,
+        arguments: ComprovanteArgs(
+          titulo: 'Comprovante',
+          conteudo: comprovanteService.fromMovimentacao(mov),
+        ),
+      );
     }
 
-    final texto = context.read<ComprovanteService>().fromMovimentacao(mov);
-
-    await Navigator.pushNamed(
-      context,
-      AppRoutes.comprovante,
-      arguments: ComprovanteArgs(titulo: 'Comprovante', conteudo: texto),
-    );
+    navigator.pop(true);
   }
 
   @override
