@@ -108,7 +108,7 @@ class _DashboardBody extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  'Acoes rapidas',
+                  'Ações rapidas',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -147,35 +147,28 @@ class _AcoesRapidas extends StatelessWidget {
       onAcaoConcluida();
     }
 
-    return Wrap(
-      spacing: 12,
-      runSpacing: 12,
+    return Row(
       children: [
-        _BotaoAcao(
-          icon: Icons.add_box,
-          rotulo: 'Novo item',
-          onTap: () => abrir(AppRoutes.itemForm),
-        ),
-        _BotaoAcao(
-          icon: Icons.login,
-          rotulo: 'Entrada',
-          onTap: () => abrir(
-            AppRoutes.movimentacaoForm,
-            const MovimentacaoFormArgs(tipo: TipoMovimentacao.entrada),
+        Expanded(
+          child: _BotaoAcao(
+            icon: Icons.login,
+            rotulo: 'Entrada',
+            onTap: () => abrir(
+              AppRoutes.movimentacaoForm,
+              const MovimentacaoFormArgs(tipo: TipoMovimentacao.entrada),
+            ),
           ),
         ),
-        _BotaoAcao(
-          icon: Icons.logout,
-          rotulo: 'Saida',
-          onTap: () => abrir(
-            AppRoutes.movimentacaoForm,
-            const MovimentacaoFormArgs(tipo: TipoMovimentacao.saida),
+        const SizedBox(width: 12),
+        Expanded(
+          child: _BotaoAcao(
+            icon: Icons.logout,
+            rotulo: 'Saida',
+            onTap: () => abrir(
+              AppRoutes.movimentacaoForm,
+              const MovimentacaoFormArgs(tipo: TipoMovimentacao.saida),
+            ),
           ),
-        ),
-        _BotaoAcao(
-          icon: Icons.confirmation_number,
-          rotulo: 'Novo ticket',
-          onTap: () => abrir(AppRoutes.ticketForm),
         ),
       ],
     );
@@ -196,18 +189,14 @@ class _BotaoAcao extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return SizedBox(
-      width: 150,
-      child: OutlinedButton.icon(
-        onPressed: onTap,
-        style: OutlinedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          alignment: Alignment.centerLeft,
-          foregroundColor: theme.colorScheme.primary,
-        ),
-        icon: Icon(icon),
-        label: Text(rotulo),
+    return OutlinedButton.icon(
+      onPressed: onTap,
+      style: OutlinedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        foregroundColor: theme.colorScheme.primary,
       ),
+      icon: Icon(icon),
+      label: Text(rotulo),
     );
   }
 }
