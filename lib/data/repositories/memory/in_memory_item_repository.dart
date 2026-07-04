@@ -16,7 +16,7 @@ class InMemoryItemRepository implements ItemRepository {
   }
 
   @override
-  Future<Item?> buscarPorId(int id) async {
+  Future<Item?> findById(int id) async {
     for (final item in _store.itens) {
       if (item.id == id) {
         return item;

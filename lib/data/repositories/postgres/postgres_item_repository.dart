@@ -15,7 +15,7 @@ class PostgresItemRepository implements ItemRepository {
   }
 
   @override
-  Future<Item?> buscarPorId(int id) async {
+  Future<Item?> findById(int id) async {
     final linhas = await _db.query(
       'SELECT * FROM itens WHERE id = @id',
       parameters: {'id': id},
