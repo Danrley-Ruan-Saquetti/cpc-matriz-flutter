@@ -1,12 +1,12 @@
 import 'package:cpc_matriz/core/enums.dart';
 import 'package:cpc_matriz/data/models/ticket.dart';
 import 'package:cpc_matriz/data/repositories/ticket_repository.dart';
-import 'package:cpc_matriz/data/services/database_service.dart';
+import 'package:cpc_matriz/data/services/postgresql_database_service.dart';
 
 class PostgresTicketRepository implements TicketRepository {
   PostgresTicketRepository(this._db);
 
-  final DatabaseService _db;
+  final PostgresDatabaseService _db;
 
   @override
   Future<List<Ticket>> listar() async {

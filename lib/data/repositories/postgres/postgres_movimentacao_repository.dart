@@ -1,13 +1,13 @@
 import 'package:cpc_matriz/core/enums.dart';
 import 'package:cpc_matriz/data/models/movimentacao.dart';
 import 'package:cpc_matriz/data/repositories/movimentacao_repository.dart';
-import 'package:cpc_matriz/data/services/database_service.dart';
+import 'package:cpc_matriz/data/services/postgresql_database_service.dart';
 import 'package:postgres/postgres.dart';
 
 class PostgresMovimentacaoRepository implements MovimentacaoRepository {
   PostgresMovimentacaoRepository(this._db);
 
-  final DatabaseService _db;
+  final PostgresDatabaseService _db;
 
   static const String _selectComItem = '''
     SELECT m.*, i.nome AS item_nome

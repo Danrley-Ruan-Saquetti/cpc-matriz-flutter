@@ -1,7 +1,7 @@
 import 'package:cpc_matriz/core/config/db_config.dart';
 import 'package:postgres/postgres.dart';
 
-class DatabaseService {
+class PostgresDatabaseService {
   Connection? _connection;
 
   bool get isConnected => _connection?.isOpen ?? false;

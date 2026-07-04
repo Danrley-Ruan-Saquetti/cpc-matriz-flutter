@@ -1,11 +1,11 @@
 import 'package:cpc_matriz/data/models/item.dart';
 import 'package:cpc_matriz/data/repositories/item_repository.dart';
-import 'package:cpc_matriz/data/services/database_service.dart';
+import 'package:cpc_matriz/data/services/postgresql_database_service.dart';
 
 class PostgresItemRepository implements ItemRepository {
   PostgresItemRepository(this._db);
 
-  final DatabaseService _db;
+  final PostgresDatabaseService _db;
 
   @override
   Future<List<Item>> listar() async {
